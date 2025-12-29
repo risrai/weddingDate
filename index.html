@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Marry Me?</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-size: cover;
+        background-position: center;
+        font-family: Arial, sans-serif;
+        transition: background-image 0.5s ease-in-out;
+    }
+
+    .box {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 30px 40px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        animation: fadeIn 0.8s;
+    }
+
+    h1 {
+        margin: 0 0 20px;
+        font-size: 2rem;
+        color: #d6336c;
+    }
+
+    button {
+        padding: 12px 25px;
+        font-size: 1.2rem;
+        margin: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    #yesBtn {
+        background: #d6336c;
+        color: white;
+    }
+    #yesBtn:hover {
+        transform: scale(1.1);
+    }
+
+    #noBtn {
+        position: relative;
+        background: #6c757d;
+        color: white;
+    }
+
+    .back-btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: gray;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="box" id="contentBox">
+    <h1 id="question">Will you marry me?</h1>
+
+    <button id="yesBtn" onclick="sayYes()">Yes 💍</button>
+    <button id="noBtn">No 😒</button>
+</div>
+
+<script>
+    const noBtn = document.getElementById("noBtn");
+    const contentBox = document.getElementById("contentBox");
+    const questionEl = document.getElementById("question");
+
+    /* -------------------------
+       MAKE "NO" BUTTON RUN AWAY
+    --------------------------*/
+    noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * 300 - 150;
+        const y = Math.random() * 300 - 150;
+        noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    /* -------------------------
+             YES CLICK
+    --------------------------*/
+    function sayYes() {
+        document.body.style.backgroundImage = "url('pic1.jpg')"; // change to your image
+
+        contentBox.innerHTML = `
+            <h1>Yay! I knew it ❤️</h1>
+            <button class="back-btn" onclick="goBack()">⬅ Go back</button>
+        `;
+    }
+
+    /* -------------------------
+             GO BACK
+    --------------------------*/
+    function goBack() {
+        document.body.style.backgroundImage = "";
+        contentBox.innerHTML = `
+            <h1 id="question">Will you marry me?</h1>
+            <button id="yesBtn" onclick="sayYes()">Yes 💍</button>
+            <button id="noBtn">No 😒</button>
+        `;
+
+        // reattach runaway effect to No button
+        const newNoBtn = document.getElementById("noBtn");
+        newNoBtn.addEventListener("mouseover", () => {
+            const x = Math.random() * 300 - 150;
+            const y = Math.random() * 300 - 150;
+            newNoBtn.style.transform = \`translate(\${x}px, \${y}px)\`;
+        });
+    }
+</script>
+
+</body>
+</html>
