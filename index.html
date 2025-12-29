@@ -2,129 +2,223 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Will You Marry Me?</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Forever Countdown</title>
+
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-size: cover;
-        background-position: center;
-        font-family: Arial, sans-serif;
-        transition: background-image 0.5s ease-in-out;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap');
 
-    .box {
-        background: rgba(255, 255, 255, 0.85);
-        padding: 30px 40px;
-        border-radius: 20px;
-        text-align: center;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        animation: fadeIn 0.8s;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    h1 {
-        margin: 0 0 20px;
-        font-size: 2rem;
-        color: #d6336c;
-    }
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
 
-    button {
-        padding: 12px 25px;
-        font-size: 1.2rem;
-        margin: 10px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+/* Background image */
+.background {
+  position: fixed;
+  inset: 0;
+  background: url("pic14.jpg") center/cover no-repeat;
+  z-index: -3;
+}
 
-    #yesBtn {
-        background: #d6336c;
-        color: white;
-    }
-    #yesBtn:hover {
-        transform: scale(1.1);
-    }
+/* Soft gradient overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.2),
+    rgba(0,0,0,0.65)
+  );
+  z-index: -2;
+}
 
-    #noBtn {
-        position: relative;
-        background: #6c757d;
-        color: white;
-    }
+/* Bottom card */
+.card {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 500px;
+  background: rgba(255,255,255,0.96);
+  border-radius: 26px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+}
 
-    .back-btn {
-        margin-top: 20px;
-        padding: 10px 20px;
-        background: gray;
-        color: white;
-        border-radius: 10px;
-        cursor: pointer;
-    }
+/* Text */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.9rem;
+  margin: 0 0 6px;
+  color: #2b2b2b;
+}
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+.subtitle {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Countdown */
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.box {
+  background: linear-gradient(145deg, #fff, #f3f3f3);
+  border-radius: 16px;
+  padding: 14px 6px;
+}
+
+.number {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #c92a5a;
+}
+
+.label {
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #777;
+}
+
+/* Music button */
+.music-btn {
+  margin-top: 18px;
+  background: #c92a5a;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Floating hearts */
+.heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 18px;
+  animation: floatUp linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateY(-110vh) scale(1.4);
+    opacity: 0;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<div class="box" id="contentBox">
-    <h1 id="question">Will you marry me?</h1>
+<div class="background"></div>
+<div class="overlay"></div>
 
-    <button id="yesBtn" onclick="sayYes()">Yes 💍</button>
-    <button id="noBtn">No 😒</button>
+<!-- Music -->
+<audio id="bgMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Bottom Card -->
+<div class="card">
+  <h1>Until We Become Forever 💍</h1>
+  <div class="subtitle">Counting every moment until our wedding day</div>
+
+  <div class="countdown">
+    <div class="box">
+      <div class="number" id="days">0</div>
+      <div class="label">Days</div>
+    </div>
+    <div class="box">
+      <div class="number" id="hours">0</div>
+      <div class="label">Hours</div>
+    </div>
+    <div class="box">
+      <div class="number" id="minutes">0</div>
+      <div class="label">Minutes</div>
+    </div>
+    <div class="box">
+      <div class="number" id="seconds">0</div>
+      <div class="label">Seconds</div>
+    </div>
+  </div>
+
+  <button class="music-btn" id="musicBtn">🎵 Play Music</button>
 </div>
 
 <script>
-    const noBtn = document.getElementById("noBtn");
-    const contentBox = document.getElementById("contentBox");
-    const questionEl = document.getElementById("question");
+/* ======================
+   SET WEDDING DATE
+   ====================== */
+const WEDDING_DATE = new Date("2026-02-24T20:00:00").getTime();
 
-    /* -------------------------
-       MAKE "NO" BUTTON RUN AWAY
-    --------------------------*/
-    noBtn.addEventListener("mouseover", () => {
-        const x = Math.random() * 300 - 150;
-        const y = Math.random() * 300 - 150;
-        noBtn.style.transform = `translate(${x}px, ${y}px)`;
-    });
+/* Countdown */
+function updateCountdown() {
+  const diff = WEDDING_DATE - Date.now();
+  if (diff <= 0) return;
 
-    /* -------------------------
-             YES CLICK
-    --------------------------*/
-    function sayYes() {
-        document.body.style.backgroundImage = "url('pic1.jpg')"; // change to your image
+  document.getElementById("days").textContent =
+    Math.floor(diff / (1000 * 60 * 60 * 24));
+  document.getElementById("hours").textContent =
+    Math.floor((diff / (1000 * 60 * 60)) % 24);
+  document.getElementById("minutes").textContent =
+    Math.floor((diff / (1000 * 60)) % 60);
+  document.getElementById("seconds").textContent =
+    Math.floor((diff / 1000) % 60);
+}
 
-        contentBox.innerHTML = `
-            <h1>Yay! I knew it ❤️</h1>
-            <button class="back-btn" onclick="goBack()">⬅ Go back</button>
-        `;
-    }
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
-    /* -------------------------
-             GO BACK
-    --------------------------*/
-    function goBack() {
-        document.body.style.backgroundImage = "";
-        contentBox.innerHTML = `
-            <h1 id="question">Will you marry me?</h1>
-            <button id="yesBtn" onclick="sayYes()">Yes 💍</button>
-            <button id="noBtn">No 😒</button>
-        `;
+/* Background music handling */
+const music = document.getElementById("bgMusic");
+const btn = document.getElementById("musicBtn");
+const START_TIME = 16;
+/* Try autoplay */
+music.volume = 0.6;
+music.play().then(() => {
+  btn.style.display = "none";
+}).catch(() => {
+  btn.style.display = "inline-block";
+});
 
-        // reattach runaway effect to No button
-        const newNoBtn = document.getElementById("noBtn");
-        newNoBtn.addEventListener("mouseover", () => {
-            const x = Math.random() * 300 - 150;
-            const y = Math.random() * 300 - 150;
-            newNoBtn.style.transform = \`translate(\${x}px, \${y}px)\`;
-        });
-    }
+btn.addEventListener("click", () => {
+ music.currentTime = START_TIME;
+  music.play();
+  btn.style.display = "none";
+});
+
+/* Floating hearts */
+function createHeart() {
+  const heart = document.createElement("div");
+  heart.className = "heart";
+  heart.textContent = Math.random() > 0.5 ? "💖" : "✨";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.animationDuration = (7 + Math.random() * 6) + "s";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 13000);
+}
+
+setInterval(createHeart, 900);
 </script>
 
 </body>
