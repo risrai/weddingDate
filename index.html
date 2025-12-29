@@ -189,32 +189,23 @@ function updateCountdown() {
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-const START_TIME = 30; // seconds into the song
+/* Background music handling */
 const music = document.getElementById("bgMusic");
 const btn = document.getElementById("musicBtn");
+const START_TIME = 16;
+/* Try autoplay */
 music.volume = 0.6;
+music.play().then(() => {
+  btn.style.display = "none";
+}).catch(() => {
+  btn.style.display = "inline-block";
+});
 
-/* Ensure music does not autoplay */
-music.pause();
-music.currentTime = START_TIME;
-
-/* Always show the button initially */
-btn.style.display = "inline-block";
-
-/* Play only on user interaction */
 btn.addEventListener("click", () => {
-  if (music.readyState >= 1) {
-    music.currentTime = START_TIME;
-  } else {
-    music.addEventListener("loadedmetadata", () => {
-      music.currentTime = START_TIME;
-    }, { once: true });
-  }
-
+ music.currentTime = START_TIME;
   music.play();
   btn.style.display = "none";
 });
-
 
 /* Floating hearts */
 function createHeart() {
@@ -232,6 +223,3 @@ setInterval(createHeart, 900);
 
 </body>
 </html>
-
-
-
