@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Our Forever Countdown</title>
+<title>Our Beautiful Journey</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap');
@@ -27,19 +27,19 @@ body {
   z-index: -3;
 }
 
-/* Soft gradient overlay */
+/* Gradient overlay */
 .overlay {
   position: fixed;
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0,0,0,0.2),
-    rgba(0,0,0,0.65)
+    rgba(0,0,0,0.25),
+    rgba(0,0,0,0.7)
   );
   z-index: -2;
 }
 
-/* Bottom card */
+/* Card */
 .card {
   position: fixed;
   bottom: 20px;
@@ -49,16 +49,15 @@ body {
   max-width: 500px;
   background: rgba(255,255,255,0.96);
   border-radius: 26px;
-  padding: 28px 24px;
+  padding: 30px 24px;
   text-align: center;
   box-shadow: 0 25px 60px rgba(0,0,0,0.35);
 }
 
-/* Text */
 h1 {
   font-family: 'Playfair Display', serif;
   font-size: 1.9rem;
-  margin: 0 0 6px;
+  margin: 0 0 10px;
   color: #2b2b2b;
 }
 
@@ -68,29 +67,16 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Countdown */
-.countdown {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-
-.box {
-  background: linear-gradient(145deg, #fff, #f3f3f3);
-  border-radius: 16px;
-  padding: 14px 6px;
-}
-
-.number {
-  font-size: 1.6rem;
+/* Journey counter */
+.journey {
+  font-size: 1.8rem;
   font-weight: 700;
   color: #c92a5a;
 }
 
-.label {
-  font-size: 0.7rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+.small {
+  font-size: 0.9rem;
+  margin-top: 6px;
   color: #777;
 }
 
@@ -133,79 +119,96 @@ h1 {
 <div class="background"></div>
 <div class="overlay"></div>
 
-<!-- Music -->
 <audio id="bgMusic" loop>
   <source src="song.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Bottom Card -->
 <div class="card">
-  <h1>Until We Become Forever 💍</h1>
-  <div class="subtitle">Counting every moment until our wedding day</div>
 
-  <div class="countdown">
-    <div class="box">
-      <div class="number" id="days">0</div>
-      <div class="label">Days</div>
-    </div>
-    <div class="box">
-      <div class="number" id="hours">0</div>
-      <div class="label">Hours</div>
-    </div>
-    <div class="box">
-      <div class="number" id="minutes">0</div>
-      <div class="label">Minutes</div>
-    </div>
-    <div class="box">
-      <div class="number" id="seconds">0</div>
-      <div class="label">Seconds</div>
-    </div>
+  <h1>Our Beautiful Marriage Journey 💍</h1>
+
+  <div class="subtitle">
+    Celebrating every day of love, patience, laughter and partnership
+  </div>
+
+  <div class="journey" id="marriageDuration">
+    Calculating...
+  </div>
+
+  <div class="small">
+    and still going strong ❤️
   </div>
 
   <button class="music-btn" id="musicBtn">🎵 Play Music</button>
+
 </div>
 
 <script>
+
 /* ======================
    SET WEDDING DATE
    ====================== */
-const WEDDING_DATE = new Date("2026-02-24T20:00:00").getTime();
+const WEDDING_DATE = new Date("2026-02-24");
 
-/* Countdown */
-function updateCountdown() {
-  const diff = WEDDING_DATE - Date.now();
-  if (diff <= 0) return;
+/* Marriage duration calculator */
 
-  document.getElementById("days").textContent =
-    Math.floor(diff / (1000 * 60 * 60 * 24));
-  document.getElementById("hours").textContent =
-    Math.floor((diff / (1000 * 60 * 60)) % 24);
-  document.getElementById("minutes").textContent =
-    Math.floor((diff / (1000 * 60)) % 60);
-  document.getElementById("seconds").textContent =
-    Math.floor((diff / 1000) % 60);
+function calculateDuration() {
+
+  const now = new Date();
+
+  let years = now.getFullYear() - WEDDING_DATE.getFullYear();
+  let months = now.getMonth() - WEDDING_DATE.getMonth();
+  let days = now.getDate() - WEDDING_DATE.getDate();
+
+  if (days < 0) {
+    months--;
+    const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  let text = "";
+
+  if (years > 0) {
+    text = `${years} year${years>1?"s":""}, ${months} month${months!=1?"s":""}, ${days} day${days!=1?"s":""}`;
+  }
+  else if (months > 0) {
+    text = `${months} month${months>1?"s":""}, ${days} day${days!=1?"s":""}`;
+  }
+  else {
+    const diffDays = Math.floor((now - WEDDING_DATE)/(1000*60*60*24));
+    text = `${diffDays} day${diffDays>1?"s":""}`;
+  }
+
+  document.getElementById("marriageDuration").textContent = text;
+
 }
 
-setInterval(updateCountdown, 1000);
-updateCountdown();
+calculateDuration();
+setInterval(calculateDuration, 60000);
 
-/* Background music handling */
+
+/* Background music */
 const music = document.getElementById("bgMusic");
 const btn = document.getElementById("musicBtn");
-const START_TIME = 16;
-/* Try autoplay */
+
 music.volume = 0.6;
-music.play().then(() => {
-  btn.style.display = "none";
-}).catch(() => {
-  btn.style.display = "inline-block";
+
+music.play().then(()=>{
+  btn.style.display="none";
+}).catch(()=>{
+  btn.style.display="inline-block";
 });
 
-btn.addEventListener("click", () => {
- music.currentTime = START_TIME;
+btn.onclick = ()=>{
   music.play();
-  btn.style.display = "none";
-});
+  btn.style.display="none";
+};
+
 
 /* Floating hearts */
 function createHeart() {
@@ -219,6 +222,7 @@ function createHeart() {
 }
 
 setInterval(createHeart, 900);
+
 </script>
 
 </body>
